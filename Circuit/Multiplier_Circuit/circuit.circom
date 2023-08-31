@@ -1,48 +1,46 @@
 pragma circom 2.0.0;
 
-/*This circuit template checks that c is the multiplication of a and b.*/  
+/* This circuit template verifies if 'c' is the product of 'a' and 'b'. */
 
-template Multiplier2 () {  
-   // Signal inputs
-   signal input a;
-   signal input b;
+template MultiplierVerification() {
+    // Input signals
+    signal input a;
+    signal input b;
 
-   // Signal from gates
-   signal x;
-   signal y;
+    // Intermediate signals
+    signal x;
+    signal y;
 
-   //  final signal output
-   signal output Q;
+    // Final output signal
+    signal output isProductValid;
 
-   // component gates used to create assessment circuit
-   component andGate = AND();
-   component notGate = NOT();
-   component orGate = OR();
+    // Component gates used to construct the verification circuit
+    component andGate = AND();
+    component notGate = NOT();
+    component orGate = OR();
 
-   // circuit logic
-   andGate.a <== a;
-   andGate.b <== b;
-   x <== andGate.out;
+    // Circuit logic
+    andGate.a <== a;
+    andGate.b <== b;
+    x <== andGate.out;
 
-   notGate.in <== b;
-   y <== notGate.out;
+    notGate.in <== b;
+    y <== notGate.out;
 
-   orGate.a <== x;
-   orGate.b <== y;
-   Q <== orGate.out;
+    orGate.a <== x;
+    orGate.b <== y;
+    isProductValid <== orGate.out;
 
-   // print the value of Q on input of a=0 & b=1;
-   log("Q : ", Q);
-
-
-   
+    // Print the value of 'isProductValid' when a=0 and b=1
+    log("isProductValid : ", isProductValid);
 }
+
 template AND() {
     signal input a;
     signal input b;
     signal output out;
 
-    out <== a*b;
+    out <== a * b;
 }
 
 template OR() {
@@ -50,13 +48,14 @@ template OR() {
     signal input b;
     signal output out;
 
-    out <== a + b - a*b;
+    out <== a + b - a * b;
 }
 
 template NOT() {
     signal input in;
     signal output out;
 
-    out <== 1 + in - 2*in;
+    out <== 1 + in - 2 * in;
 }
-component main = Multiplier2();
+
+component main = MultiplierVerification();
